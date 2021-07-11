@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <TextureView
+        android:id="@+id/textureview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surfaceView2" />
+        app:layout_constraintTop_toBottomOf="@+id/surfaceView" />
 
-    <SurfaceView
-        android:id="@+id/surfaceView2"
+    <TextureView
+        android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
