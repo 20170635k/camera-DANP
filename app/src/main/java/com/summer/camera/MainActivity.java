@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imageview;
 
-
+    ImageView intentImplicito;
     /*----------------------------------------------------------------*/
     private static final String TAG = "AndroidCameraApi";
     private TextureView textureView;
@@ -80,12 +80,11 @@ public class MainActivity extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
-    View.OnClickListener callbackIntentCamera=new View.OnClickListener() {
+    View.OnClickListener callbackIntentImplicito=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(takePictureIntent, 1);
-
         }
     };
     @Override
@@ -94,6 +93,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         textureView = findViewById(R.id.textureview);
         imageview= findViewById(R.id.imageview);
+
+
+        //intent implicito
+        intentImplicito= findViewById(R.id.intentImplicito);
+        intentImplicito.setOnClickListener(callbackIntentImplicito);
+
+
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
         intentCamera=findViewById(R.id.intentCamera);
@@ -199,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
+
+
             File dir = new File(this.getFilesDir(), "kelvindir");
             final File file = new File(dir.toString() + "/pic.jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
@@ -213,6 +221,9 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
+                                Log.d("testing","tamagno: "+bytes.length);
+
                                 imageview.setImageBitmap(BitmapFactory.decodeByteArray(bytes , 0, bytes .length));
 
                             }
