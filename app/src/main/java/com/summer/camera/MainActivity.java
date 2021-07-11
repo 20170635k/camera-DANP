@@ -8,6 +8,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView intentCamera;
 
-
+    ImageView imageview;
 
 
     /*----------------------------------------------------------------*/
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textureView = findViewById(R.id.textureview);
+        imageview= findViewById(R.id.imageview);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
         intentCamera=findViewById(R.id.intentCamera);
@@ -131,12 +134,10 @@ public class MainActivity extends AppCompatActivity {
             cameraDevice = camera;
             createCameraPreview();
         }
-
         @Override
         public void onDisconnected(CameraDevice camera) {
             cameraDevice.close();
         }
-
         @Override
         public void onError(CameraDevice camera, int error) {
             cameraDevice.close();
@@ -197,7 +198,9 @@ public class MainActivity extends AppCompatActivity {
             // Orientation
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
-            final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
+
+            File dir = new File(this.getFilesDir(), "kelvindir");
+            final File file = new File(dir.toString() + "/pic.jpg");
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -207,6 +210,13 @@ public class MainActivity extends AppCompatActivity {
                         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageview.setImageBitmap(BitmapFactory.decodeByteArray(bytes , 0, bytes .length));
+
+                            }
+                        });
                         save(bytes);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
